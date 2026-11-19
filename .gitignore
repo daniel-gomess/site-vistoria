@@ -1,0 +1,7 @@
+# originais baixados (pesados) e ferramentas locais de verificação
+assets/src/
+assets/src2/
+.scrollcraft/lab/
+node_modules/
+.DS_Store
+Thumbs.db

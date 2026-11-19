@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>3V · Franquias de vistoria automotiva</title>
+<meta name="description" content="Rede de franquias de vistoria automotiva. Três modelos de franquia, a partir de R$ 20 mil, com gravação de NIV, perícia veicular e suporte completo.">
+<meta name="theme-color" content="#100b0c">
+<meta property="og:title" content="3V · Seja um franqueado">
+<meta property="og:description" content="Veículo vistoriado, você despreocupado. Três modelos de franquia, a partir de R$ 20 mil.">
+<meta property="og:image" content="assets/img/hero.webp">
+<link rel="icon" id="favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23a31526'/><text x='15' y='21.5' font-family='Arial' font-weight='700' font-size='14' fill='white' text-anchor='middle'>3V</text></svg>">
+<script>
+  /* Escolhe a marca antes da primeira pintura, para não piscar a paleta errada.
+     ?logo=1 ou ?logo=2 na URL vence; depois vale a última escolha do visitante. */
+  (function () {
+    var b = '1';
+    try {
+      var q = new URLSearchParams(location.search).get('logo');
+      b = (q === '1' || q === '2') ? q : (localStorage.getItem('3v-logo') || '1');
+    } catch (e) {}
+    document.documentElement.setAttribute('data-brand', b === '2' ? '2' : '1');
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/img/hero.webp">
+<link rel="stylesheet" href="scrollcraft.css">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<a class="skip" href="#cadastro">Ir para o cadastro</a>
+<span data-sc-progress></span>
+<div class="sc-grain" aria-hidden="true"></div>
+
+<header class="bar">
+  <a class="mark" href="#capa" aria-label="3V Terceira Visão, início">
+    <img class="mark__img--1" src="assets/img/logo1-mark.png" width="738" height="402" alt="">
+    <img class="mark__img--2" src="assets/img/logo2-mark.png" width="784" height="416" alt="">
+  </a>
+  <div class="bar__right">
+    <button type="button" class="tema" role="switch" aria-checked="false" aria-label="Tema: alterna entre o logo 1 (vinho) e o logo 2 (grafite)">
+      <span class="tema__label" aria-hidden="true">Tema</span>
+      <span class="tema__track" aria-hidden="true"><span class="tema__knob"></span></span>
+    </button>
+    <a class="btn btn--sm" href="#cadastro">Quero ser franqueado</a>
+  </div>
+</header>
+
+<!-- A ficha de vistoria: o checklist do laudo. Cada item vira "conforme"
+     quando o visitante passa por ele. Abaixo de 1200px fica oculta. -->
+<nav class="ficha" aria-label="Ficha de vistoria">
+  <p class="ficha__title">Ficha de vistoria</p>
+  <ol class="ficha__list">
+    <li><a href="#capa" data-ficha="capa"><span class="ficha__box" aria-hidden="true"></span>Identificação</a></li>
+    <li><a href="#mercado" data-ficha="mercado"><span class="ficha__box" aria-hidden="true"></span>Mercado</a></li>
+    <li><a href="#empresa" data-ficha="empresa"><span class="ficha__box" aria-hidden="true"></span>Empresa</a></li>
+    <li><a href="#servicos" data-ficha="servicos"><span class="ficha__box" aria-hidden="true"></span>Serviços</a></li>
+    <li><a href="#niv" data-ficha="niv"><span class="ficha__box" aria-hidden="true"></span>NIV e perícia</a></li>
+    <li><a href="#modelos" data-ficha="modelos"><span class="ficha__box" aria-hidden="true"></span>Modelos</a></li>
+    <li><a href="#suporte" data-ficha="suporte"><span class="ficha__box" aria-hidden="true"></span>Suporte</a></li>
+    <li><a href="#cadastro" data-ficha="cadastro"><span class="ficha__box" aria-hidden="true"></span>Cadastro</a></li>
+  </ol>
+</nav>
+
+<main>
+
+  <!-- 1 · CAPA: pin curto com cinco planos em ritmos diferentes -->
+  <section id="capa" class="capa" data-sc-act="pin" data-sc-span="1.7">
+    <div data-sc-stage class="capa__stage">
+      <div class="capa__scene" aria-hidden="true">
+        <img class="capa__photo" src="assets/img/hero.webp" width="2400" height="1800" alt="" fetchpriority="high">
+        <div class="capa__beam"></div>
+        <svg class="capa__reticle" viewBox="0 0 2400 1800" preserveAspectRatio="none" focusable="false">
+          <g class="ret ret--frame">
+            <path pathLength="1" d="M500 820 V690 H630"/>
+            <path pathLength="1" d="M1680 690 H1810 V820"/>
+            <path pathLength="1" d="M1810 1010 V1140 H1680"/>
+            <path pathLength="1" d="M630 1140 H500 V1010"/>
+          </g>
+          <g class="ret ret--lens">
+            <circle cx="1440" cy="915" r="78" pathLength="1"/>
+            <path pathLength="1" d="M1440 810 V860 M1440 970 V1020 M1335 915 H1385 M1495 915 H1545"/>
+          </g>
+          <g class="ret ret--dim">
+            <path pathLength="1" d="M510 1205 H1800 M510 1185 V1225 M1800 1185 V1225"/>
+          </g>
+          <g class="callout callout--a">
+            <path pathLength="1" d="M1500 870 L1400 690 H1060"/>
+            <circle cx="1500" cy="870" r="9"/>
+            <text x="1070" y="668">Farol · íntegro</text>
+          </g>
+          <g class="callout callout--c">
+            <path pathLength="1" d="M1060 1340 L1260 1460 H1740"/>
+            <circle cx="1060" cy="1340" r="9"/>
+            <text x="1280" y="1440">Identificação · conferir</text>
+          </g>
+        </svg>
+      </div>
+      <div class="capa__fore" aria-hidden="true"></div>
+      <div class="sc-scrim capa__scrim" aria-hidden="true"></div>
+
+      <div class="capa__copywrap">
+        <div class="capa__copy" data-sc-cue="0 0.66 0 0.25">
+          <h1 class="capa__title">Veículo vistoriado, você&nbsp;despreocupado.</h1>
+          <p class="capa__sub">Rede de franquias de vistoria automotiva. Três modelos, a partir de R$&nbsp;20&nbsp;mil.</p>
+          <div class="capa__actions">
+            <a class="btn" href="#cadastro">Quero ser franqueado</a>
+            <a class="link" href="#modelos">Ver os modelos</a>
+          </div>
+        </div>
+      </div>
+      <p class="capa__second" data-sc-cue="0.62 0.98 0.2 0.1">Cada detalhe conferido. Cada laudo, padronizado.</p>
+    </div>
+  </section>
+
+  <!-- 2 · MERCADO: count + reveal. Inquietação. -->
+  <section id="mercado" class="mercado">
+    <div class="wrap mercado__grid">
+      <div class="mercado__fig" data-sc-in>
+        <p class="mercado__num"><span data-sc-count="0 14" data-sc-count-ms="1500">14</span><span class="mercado__unit">milhões</span></p>
+        <p class="mercado__cap">de veículos comercializados por ano no Brasil.</p>
+      </div>
+      <div class="mercado__text sc-stack" data-sc-in data-sc-stagger="60">
+        <h2 class="h2">O mercado não para. E nem todo carro é o que parece.</h2>
+        <p class="body">A demanda por segurança na compra e venda de veículos cresce a cada ano. Por trás de um seminovo bem lavado pode haver muita coisa.</p>
+      </div>
+    </div>
+    <div class="mercado__photo-act" data-sc-act="flow">
+      <figure class="mercado__photo" data-sc-reveal="up" data-sc-reveal-at="0.12 0.5">
+        <img src="assets/img/patio.webp" width="2200" height="1650" alt="Vista aérea de um pátio com centenas de carros estacionados em fileiras." loading="lazy">
+      </figure>
+    </div>
+    <div class="wrap">
+      <ul class="riscos" data-sc-in data-sc-stagger="50">
+        <li><span class="riscos__flag" aria-hidden="true">?</span><span>Fraudes na venda de veículos</span></li>
+        <li><span class="riscos__flag" aria-hidden="true">?</span><span>Adulteração de numeração</span></li>
+        <li><span class="riscos__flag" aria-hidden="true">?</span><span>Histórico de sinistros oculto</span></li>
+        <li><span class="riscos__flag" aria-hidden="true">?</span><span>Peças irregulares ou adulteradas</span></li>
+      </ul>
+      <p class="mercado__close" data-sc-in>A vistoria é o que traz transparência entre vendedor e comprador e segurança jurídica na transferência.</p>
+    </div>
+  </section>
+
+  <!-- 3 · EMPRESA: flow + in. Alívio. -->
+  <section id="empresa" class="empresa">
+    <div class="wrap empresa__grid">
+      <div class="empresa__lead sc-stack" data-sc-in data-sc-stagger="60">
+        <h2 class="h2">A 3V nasce para transformar o mercado de vistorias automotivas.</h2>
+        <p class="body">Uma rede moderna, escalável e orientada a performance. Cada unidade opera com o mesmo processo, o mesmo sistema e o mesmo padrão de laudo.</p>
+      </div>
+      <dl class="pilares" data-sc-in data-sc-stagger="70">
+        <div><dt>Processos ágeis</dt><dd>Padronizados e eficientes.</dd></div>
+        <div><dt>Alta confiabilidade</dt><dd>Em cada laudo emitido.</dd></div>
+        <div><dt>Transparência total</dt><dd>Nas negociações.</dd></div>
+        <div><dt>Tecnologia própria</dt><dd>Sistema de gestão e laudos.</dd></div>
+      </dl>
+    </div>
+    <div class="wrap mvv" data-sc-in data-sc-stagger="70">
+      <div class="mvv__missao">
+        <h3 class="mvv__k">Missão</h3>
+        <p class="mvv__lede">Oferecer vistorias rápidas, seguras e confiáveis, superando a expectativa dos clientes.</p>
+      </div>
+      <div>
+        <h3 class="mvv__k">Visão</h3>
+        <p class="body">Ser referência nacional em vistorias automotivas e modelo de franquia eficiente e rentável.</p>
+      </div>
+      <div>
+        <h3 class="mvv__k">Valores</h3>
+        <p class="body">Ética e transparência. Excelência operacional. Agilidade e foco no cliente. Inovação contínua.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · SERVIÇOS: pan. Amplitude. -->
+  <section id="servicos" class="servicos" data-sc-act="pan" data-sc-span="2.7">
+    <div data-sc-stage class="servicos__stage">
+      <div class="rail" data-sc-pan="0.04">
+        <div class="rail__lead">
+          <h2 class="h2">O portfólio mais completo do segmento.</h2>
+          <p class="body">Várias fontes de receita por unidade, para clientes pessoa física e empresas.</p>
+        </div>
+        <article class="ficha-s"><p class="tag">Core</p><h3>Vistoria cautelar</h3><p>Histórico, estrutura e procedência antes da compra.</p></article>
+        <article class="ficha-s"><p class="tag">Core</p><h3>Vistoria de transferência</h3><p>Exigida para a troca de titularidade do veículo.</p></article>
+        <figure class="ficha-s ficha-s--photo"><img src="assets/img/farol-detalhe.webp" width="1400" height="1867" alt="Farol de um carro preto em detalhe, com reflexos de luz na lataria." loading="lazy"></figure>
+        <article class="ficha-s"><p class="tag">Core</p><h3>Vistoria de avaliação</h3><p>Base técnica para precificar compra, venda e financiamento.</p></article>
+        <article class="ficha-s"><p class="tag">B2B</p><h3>Vistoria para frotas</h3><p>Rotina de inspeção para locadoras e empresas.</p></article>
+        <article class="ficha-s"><p class="tag">Premium</p><h3>Inspeções personalizadas</h3><p>Escopo sob medida para cada cliente corporativo.</p></article>
+        <figure class="ficha-s ficha-s--photo"><img src="assets/img/farol-chuva.webp" width="1400" height="2493" alt="Farol de um carro escuro coberto de gotas de chuva." loading="lazy"></figure>
+        <article class="ficha-s ficha-s--accent"><p class="tag">Diferencial</p><h3>Gravação de NIV</h3><p>Numeração de identificação veicular gravada no chassi.</p></article>
+        <article class="ficha-s ficha-s--accent"><p class="tag">Diferencial</p><h3>Regravação de NIV</h3><p>Para veículos sem numeração visível ou legível.</p></article>
+        <article class="ficha-s ficha-s--accent"><p class="tag">Diferencial</p><h3>Perito em ID veicular</h3><p>Laudo pericial com validade legal.</p></article>
+        <div class="rail__note">
+          <p class="body">Atende revendas e concessionárias, locadoras e frotas, bancos e financeiras, despachantes, seguradoras e proteção veicular, e pessoas físicas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · PAUSA: silêncio autoral antes do pico -->
+  <section class="pausa" aria-label="Transição">
+    <p class="pausa__line" data-sc-in>Até aqui, o que toda boa vistoria faz.<br><span>Agora, o que quase ninguém faz.</span></p>
+  </section>
+
+  <!-- 6 · NIV: o pico. A rolagem grava o número do chassi e o perito confere. -->
+  <section id="niv" class="niv" data-sc-act="pin" data-sc-span="3.6">
+    <div data-sc-stage class="niv__stage">
+      <div class="niv__copy">
+        <p class="eyebrow">Exclusivo das franquias Micro e Master</p>
+        <h2 class="h2">Gravação de NIV e perícia em identificação veicular.</h2>
+        <p class="body">O NIV é o código único gravado no chassi e na carroceria. Gravar, regravar e periciar essa numeração é serviço exigido por seguradoras, Detran e instituições financeiras, com alto valor agregado e baixa concorrência.</p>
+        <ul class="niv__steps">
+          <li><strong>Gravação original</strong> para veículos sem numeração visível.</li>
+          <li><strong>Regravação e perícia</strong> para regularização junto a despachantes, locadoras e financeiras.</li>
+          <li><strong>Laudo pericial</strong> com validade legal.</li>
+        </ul>
+      </div>
+
+      <div class="plate-wrap">
+        <div class="plate" data-niv data-sc-verify-state="0:0">
+          <p class="plate__label"><span>Número de identificação veicular</span><span>Exemplo ilustrativo</span></p>
+          <p class="plate__code" aria-label="Exemplo de NIV: 9BV3VSTR1A2025814">
+            <span>9</span><span>B</span><span>V</span><span>3</span><span>V</span><span>S</span><span>T</span><span>R</span><span>1</span><span>A</span><span>2</span><span>0</span><span>2</span><span>5</span><span>8</span><span>1</span><span>4</span>
+          </p>
+          <div class="plate__lens" aria-hidden="true"></div>
+          <p class="plate__status" aria-hidden="true"><span class="plate__phase">Pronto para gravar</span><span class="plate__count"></span></p>
+          <p class="plate__stamp" aria-hidden="true">Numeração conferida<br><span>Laudo pericial emitido</span></p>
+        </div>
+        <p class="niv__law">Adulterar a numeração de identificação de um veículo é crime (art. 311 do Código Penal).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · MODELOS: tabela. Clareza. -->
+  <section id="modelos" class="modelos">
+    <div class="wrap">
+      <div class="modelos__head sc-stack" data-sc-in data-sc-stagger="60">
+        <h2 class="h2">Escolha seu modelo.</h2>
+        <p class="body">Três formatos para começar do tamanho certo. Royalties de 10% sobre o faturamento mensal em todos eles.</p>
+      </div>
+      <div class="tabela-wrap" data-sc-in>
+        <table class="tabela">
+          <caption class="sr-only">Comparativo dos modelos de franquia 3V</caption>
+          <thead>
+            <tr>
+              <td></td>
+              <th scope="col"><span class="tabela__nome">Delivery</span><span class="tabela__preco">R$ 20.000</span></th>
+              <th scope="col"><span class="tabela__nome">Micro</span><span class="tabela__preco">R$ 40.000</span></th>
+              <th scope="col"><span class="tabela__nome">Master</span><span class="tabela__preco">R$ 60.000</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Operação</th><td data-l="Operação">Enxuta e móvel</td><td data-l="Operação">Híbrida, base e delivery</td><td data-l="Operação">Completa e estruturada</td></tr>
+            <tr><th scope="row">Estrutura</th><td data-l="Estrutura">Atendimento no local do cliente</td><td data-l="Estrutura">Base operacional leve</td><td data-l="Estrutura">Base física estruturada</td></tr>
+            <tr><th scope="row">Alcance</th><td data-l="Alcance">Baixo custo operacional</td><td data-l="Alcance">Atendimento local e externo</td><td data-l="Alcance">Maior potencial de faturamento</td></tr>
+            <tr><th scope="row">Serviços exclusivos</th><td data-l="Serviços exclusivos" class="tabela__muted">Estrutura simplificada</td><td data-l="Serviços exclusivos"><span class="tabela__hl">Gravação e regravação de NIV</span></td><td data-l="Serviços exclusivos"><span class="tabela__hl">Perito em ID veicular e NIV</span></td></tr>
+            <tr><th scope="row">Ideal para</th><td data-l="Ideal para">Início rápido</td><td data-l="Ideal para">Escalar com rentabilidade</td><td data-l="Ideal para">Gestão de equipe e expansão</td></tr>
+            <tr><th scope="row">Royalties</th><td data-l="Royalties">10% do faturamento</td><td data-l="Royalties">10% do faturamento</td><td data-l="Royalties">10% do faturamento</td></tr>
+            <tr class="tabela__cta"><td></td>
+              <td><a class="btn btn--ghost" href="#cadastro" data-escolher="delivery">Escolher Delivery</a></td>
+              <td><a class="btn btn--ghost" href="#cadastro" data-escolher="micro">Escolher Micro</a></td>
+              <td><a class="btn btn--ghost" href="#cadastro" data-escolher="master">Escolher Master</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · SUPORTE: parallax na coluna de mídia. Segurança. -->
+  <section id="suporte" class="suporte" data-sc-act="flow">
+    <div class="wrap suporte__grid">
+      <figure class="suporte__media">
+        <div class="suporte__img" data-sc-parallax="-1.1">
+          <img src="assets/img/fachada.webp" width="1024" height="768" alt="Fachada de uma unidade 3ª Visão, com o letreiro Perícias e Vistorias Automotivas e o portão aberto." loading="lazy">
+        </div>
+      </figure>
+      <div class="suporte__text">
+        <div class="sc-stack" data-sc-in data-sc-stagger="60">
+          <h2 class="h2">Suporte em todas as frentes.</h2>
+          <p class="body">Você entra com o investimento e a vontade de crescer. Treinamento, sistema e suporte já estão inclusos.</p>
+        </div>
+        <div class="ledgers">
+          <dl class="ledger" data-sc-in data-sc-stagger="50">
+            <div><dt>Marketing</dt><dd>Nacional, regional e local</dd></div>
+            <div><dt>Treinamento</dt><dd>Contínuo e certificado</dd></div>
+            <div><dt>Gestão e operação</dt><dd>Consultores especializados</dd></div>
+            <div><dt>Financeiro</dt><dd>Controle e gerenciamento</dd></div>
+            <div><dt>Jurídico</dt><dd>Proteção e prevenção</dd></div>
+            <div><dt>Comercial</dt><dd>Prospecção nacional</dd></div>
+          </dl>
+          <div class="mkt" data-sc-in>
+            <h3 class="mkt__title">Marketing ativo, gerando leads para a sua unidade</h3>
+            <p class="mkt__list">Google Ads <span aria-hidden="true">/</span> Facebook e Instagram <span aria-hidden="true">/</span> TikTok <span aria-hidden="true">/</span> OLX e Mercado Livre <span aria-hidden="true">/</span> SEO e e-commerce próprio <span aria-hidden="true">/</span> WhatsApp Business integrado a CRM</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · CADASTRO: a assinatura do laudo. Decisão. -->
+  <section id="cadastro" class="cadastro">
+    <figure class="cadastro__band">
+      <img src="assets/img/neblina.webp" width="2200" height="1467" alt="Uma pessoa de pé diante dos faróis de um carro numa estrada com neblina, à noite." loading="lazy">
+      <div class="sc-scrim sc-scrim--band" aria-hidden="true"></div>
+      <h2 class="cadastro__title wrap">A 3V está pronta para crescer com você.</h2>
+    </figure>
+
+    <div class="wrap cadastro__grid">
+      <div class="laudo" data-sc-in data-sc-stagger="60">
+        <h3 class="laudo__title">Por que investir</h3>
+        <ul class="laudo__list">
+          <li><span class="laudo__ok" aria-hidden="true"></span><div><strong>Mercado em expansão</strong><span>14 milhões de veículos comercializados por ano.</span></div></li>
+          <li><span class="laudo__ok" aria-hidden="true"></span><div><strong>Modelo testado e replicável</strong><span>Operação estruturada desde o primeiro dia.</span></div></li>
+          <li><span class="laudo__ok" aria-hidden="true"></span><div><strong>Baixo investimento inicial</strong><span>A partir de R$ 20 mil, com royalties de 10%.</span></div></li>
+          <li><span class="laudo__ok" aria-hidden="true"></span><div><strong>Início rápido</strong><span>Treinamento, sistema e suporte inclusos.</span></div></li>
+          <li><span class="laudo__ok" aria-hidden="true"></span><div><strong>Alto potencial de crescimento</strong><span>NIV e perícia: serviços exclusivos de alto valor.</span></div></li>
+        </ul>
+      </div>
+
+      <form class="form" id="form-cadastro" action="https://formsubmit.co/dani.augusto.gomes@hotmail.com" method="POST" novalidate>
+        <h3 class="form__title">Cadastro de interesse</h3>
+        <p class="form__intro">Deixe seus dados e um consultor da 3V entra em contato.</p>
+
+        <input type="hidden" name="_subject" value="Novo cadastro de franqueado · 3V">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <div class="hp" aria-hidden="true"><label>Não preencha<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>
+
+        <div class="field">
+          <label for="f-nome">Nome completo</label>
+          <input id="f-nome" name="Nome" type="text" autocomplete="name" required minlength="3" aria-describedby="e-nome">
+          <p class="field__err" id="e-nome" aria-live="polite"></p>
+        </div>
+        <div class="field">
+          <label for="f-tel">Telefone com DDD</label>
+          <input id="f-tel" name="Telefone" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="(11) 91234-5678" aria-describedby="e-tel">
+          <p class="field__err" id="e-tel" aria-live="polite"></p>
+        </div>
+        <div class="field">
+          <label for="f-email">E-mail</label>
+          <input id="f-email" name="E-mail" type="email" autocomplete="email" required aria-describedby="e-email">
+          <p class="field__err" id="e-email" aria-live="polite"></p>
+        </div>
+
+        <fieldset class="modelo" aria-describedby="e-modelo">
+          <legend>Modelo desejado</legend>
+          <label class="opt"><input type="radio" name="Modelo" value="Delivery (R$ 20.000)" data-modelo="delivery" required><span class="opt__name">Delivery</span><span class="opt__meta">R$ 20 mil</span></label>
+          <label class="opt"><input type="radio" name="Modelo" value="Micro (R$ 40.000)" data-modelo="micro"><span class="opt__name">Micro</span><span class="opt__meta">R$ 40 mil</span></label>
+          <label class="opt"><input type="radio" name="Modelo" value="Master (R$ 60.000)" data-modelo="master"><span class="opt__name">Master</span><span class="opt__meta">R$ 60 mil</span></label>
+          <label class="opt opt--open"><input type="radio" name="Modelo" value="Ainda não decidi (aberto a negociar o modelo)" data-modelo="indeciso"><span class="opt__name">Ainda não decidi</span><span class="opt__meta">Quero conversar sobre o modelo ideal</span></label>
+          <p class="field__err" id="e-modelo" aria-live="polite"></p>
+        </fieldset>
+
+        <button class="btn btn--full" type="submit">Quero ser franqueado</button>
+        <p class="form__status" role="status" aria-live="polite"></p>
+        <p class="form__legal">Ao enviar, você autoriza a 3V a entrar em contato pelos dados informados.</p>
+      </form>
+
+      <div class="form-done" hidden tabindex="-1">
+        <p class="form-done__mark" aria-hidden="true"></p>
+        <h3 class="form-done__title">Cadastro recebido.</h3>
+        <p class="body">Obrigado, <span data-done-nome></span>. Um consultor da 3V vai falar com você em breve pelo telefone ou e-mail informado.</p>
+      </div>
+    </div>
+
+    <footer class="foot wrap">
+      <p class="mark mark--foot"><img class="mark__img--1" src="assets/img/logo1-mark.png" width="738" height="402" alt="3V Terceira Visão"><img class="mark__img--2" src="assets/img/logo2-mark.png" width="784" height="416" alt="3V Terceira Visão"></p>
+      <p>Rede de vistorias automotivas · Franquias disponíveis</p>
+      <p>Fotos de veículos: Unsplash</p>
+    </footer>
+  </section>
+
+</main>
+
+<script src="scrollcraft.js"></script>
+<script>ScrollCraft.mount(document.body);</script>
+<script src="site.js"></script>
+</body>
+</html>

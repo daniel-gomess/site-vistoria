@@ -1,0 +1,249 @@
+/* 3V · comportamento próprio da página.
+   O engine (scrollcraft.js) fica intocado. Aqui moram:
+   1. a ficha de vistoria (nav que marca cada item como conferido)
+   2. a gravação do NIV (assinatura da página)
+   3. a escolha de modelo pela tabela, levada até o formulário
+   4. o envio do cadastro via FormSubmit */
+(function () {
+  'use strict';
+
+  var FORM_ENDPOINT = 'https://formsubmit.co/ajax/dani.augusto.gomes@hotmail.com';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+  function progressOf(el) { return parseFloat(el.style.getPropertyValue('--sc-p')) || 0; }
+
+  /* ------------------------------------------------- 0. seletor de logo -- */
+  var BRANDS = {
+    '1': { theme: '#100b0c', tile: '%23a31526' },
+    '2': { theme: '#1b2226', tile: '%2333404a' }
+  };
+  var favicon = document.getElementById('favicon');
+  var themeMeta = document.querySelector('meta[name="theme-color"]');
+  function setBrand(b, persist) {
+    if (!BRANDS[b]) b = '1';
+    document.documentElement.setAttribute('data-brand', b);
+    var sw = document.querySelector('.tema');
+    if (sw) sw.setAttribute('aria-checked', b === '2' ? 'true' : 'false');
+    if (themeMeta) themeMeta.setAttribute('content', BRANDS[b].theme);
+    if (favicon) favicon.href = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='" + BRANDS[b].tile + "'/>" +
+      (b === '2' ? "<circle cx='26' cy='7' r='3' fill='%23c41532'/>" : '') +
+      "<text x='15' y='21.5' font-family='Arial' font-weight='700' font-size='14' fill='white' text-anchor='middle'>3V</text></svg>";
+    if (persist) { try { localStorage.setItem('3v-logo', b); } catch (e) {} }
+  }
+  setBrand(document.documentElement.getAttribute('data-brand') || '1', false);
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.tema')) {
+      setBrand(document.documentElement.getAttribute('data-brand') === '2' ? '1' : '2', true);
+    }
+  });
+
+  /* ---------------------------------------------- 1. ficha de vistoria -- */
+  var links = Array.prototype.slice.call(document.querySelectorAll('[data-ficha]'));
+  var items = links.map(function (a) {
+    return { a: a, el: document.getElementById(a.getAttribute('data-ficha')) };
+  }).filter(function (i) { return i.el; });
+
+  function updateFicha() {
+    var line = window.innerHeight * 0.45;
+    var hereIdx = 0;
+    items.forEach(function (it, i) { if (it.el.getBoundingClientRect().top <= line) hereIdx = i; });
+    var atEnd = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+    items.forEach(function (it, i) {
+      var done = i < hereIdx || (atEnd && i === hereIdx);
+      it.a.classList.toggle('is-done', done);
+      it.a.classList.toggle('is-here', i === hereIdx);
+      if (i === hereIdx) it.a.setAttribute('aria-current', 'step'); else it.a.removeAttribute('aria-current');
+    });
+  }
+
+  /* ------------------------------------------------- 2. gravação do NIV -- */
+  var plate = document.querySelector('[data-niv]');
+  var niv = plate && plate.closest('[data-sc-act]');
+  var chars = plate ? Array.prototype.slice.call(plate.querySelectorAll('.plate__code span')) : [];
+  var lens = plate && plate.querySelector('.plate__lens');
+  var stamp = plate && plate.querySelector('.plate__stamp');
+  var phaseEl = plate && plate.querySelector('.plate__phase');
+  var countEl = plate && plate.querySelector('.plate__count');
+  var N = chars.length;
+  var last = '';
+
+  // Linha do tempo, em progresso do ato (0..1):
+  //   0.06 a 0.50  o punção grava um caractere por vez
+  //   0.54 a 0.86  a lente do perito passa e confere cada um
+  //   0.90 em diante  o carimbo do laudo
+  var STAMP = [0.06, 0.50], CHECK = [0.54, 0.86], DONE = 0.9;
+
+  function renderNiv(p) {
+    var n = Math.floor(clamp01((p - STAMP[0]) / (STAMP[1] - STAMP[0])) * N + 0.0001);
+    var m = Math.floor(clamp01((p - CHECK[0]) / (CHECK[1] - CHECK[0])) * N + 0.0001);
+    var done = p >= DONE;
+    var key = n + ':' + m + ':' + (done ? 1 : 0);
+    var lensOn = p > CHECK[0] - 0.03 && p < DONE + 0.02;
+
+    if (lens) {
+      lens.classList.toggle('is-on', lensOn);
+      if (lensOn) {
+        var t = clamp01((p - CHECK[0]) / (CHECK[1] - CHECK[0]));
+        var idx = Math.min(N - 1, Math.floor(t * N));
+        var c = chars[idx];
+        var pr = plate.getBoundingClientRect(), cr = c.getBoundingClientRect();
+        // posição contínua entre o caractere atual e o próximo
+        var frac = t * N - idx;
+        var next = chars[Math.min(N - 1, idx + 1)].getBoundingClientRect();
+        var x = (cr.left + cr.width / 2) + ((next.left - cr.left) * Math.min(frac, 1)) - pr.left;
+        lens.style.setProperty('--lens-x', x.toFixed(1) + 'px');
+        lens.style.top = ((cr.top + cr.height / 2) - pr.top) + 'px';
+      }
+    }
+    if (key === last) return;
+    last = key;
+    plate.setAttribute('data-sc-verify-state', key);
+
+    chars.forEach(function (s, i) {
+      s.classList.toggle('is-stamped', i < n);
+      s.classList.toggle('is-ok', i < m);
+    });
+    if (stamp) stamp.classList.toggle('is-on', done);
+    if (phaseEl && countEl) {
+      if (done) { phaseEl.textContent = 'Numeração conferida'; countEl.textContent = N + '/' + N; }
+      else if (m > 0) { phaseEl.textContent = 'Perito conferindo'; countEl.textContent = m + '/' + N; }
+      else if (n >= N) { phaseEl.textContent = 'Gravação concluída'; countEl.textContent = N + '/' + N; }
+      else if (n > 0) { phaseEl.textContent = 'Gravando'; countEl.textContent = n + '/' + N; }
+      else { phaseEl.textContent = 'Pronto para gravar'; countEl.textContent = '0/' + N; }
+    }
+  }
+
+  /* --------------------------------------------------------- laço único -- */
+  var nivVisible = false;
+  if (niv && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) { nivVisible = es[0].isIntersecting; }, { rootMargin: '20% 0px' }).observe(niv);
+  }
+  var ticking = false;
+  function frame() {
+    ticking = false;
+    updateFicha();
+    if (plate) renderNiv(reduce ? 1 : (nivVisible ? progressOf(niv) : (niv.getBoundingClientRect().top < 0 ? 1 : 0)));
+  }
+  function request() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
+  window.addEventListener('scroll', request, { passive: true });
+  window.addEventListener('resize', request);
+  // o engine publica --sc-p no próprio rAF; um laço curto garante a leitura depois dele
+  (function loop() { if (nivVisible) frame(); requestAnimationFrame(loop); })();
+  request();
+
+  /* ---------------------------------- 3. escolha de modelo pela tabela -- */
+  var form = document.getElementById('form-cadastro');
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('[data-escolher]');
+    if (!a || !form) return;
+    var r = form.querySelector('input[data-modelo="' + a.getAttribute('data-escolher') + '"]');
+    if (r) { r.checked = true; clearErr(form.querySelector('.modelo'), 'e-modelo'); }
+  });
+
+  /* ------------------------------------------------------ 4. cadastro -- */
+  if (!form) return;
+  var tel = form.querySelector('#f-tel');
+  var nome = form.querySelector('#f-nome');
+  var email = form.querySelector('#f-email');
+  var btn = form.querySelector('button[type="submit"]');
+  var status = form.querySelector('.form__status');
+  var done = document.querySelector('.form-done');
+
+  function digits(v) { return (v || '').replace(/\D/g, '').slice(0, 11); }
+  function maskPhone(v) {
+    var d = digits(v);
+    if (d.length <= 2) return d.length ? '(' + d : '';
+    if (d.length <= 6) return '(' + d.slice(0, 2) + ') ' + d.slice(2);
+    if (d.length <= 10) return '(' + d.slice(0, 2) + ') ' + d.slice(2, 6) + '-' + d.slice(6);
+    return '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7);
+  }
+  tel.addEventListener('input', function () {
+    var atEnd = tel.selectionStart === tel.value.length;
+    tel.value = maskPhone(tel.value);
+    if (atEnd) tel.setSelectionRange(tel.value.length, tel.value.length);
+  });
+
+  function setErr(input, id, msg) {
+    var p = document.getElementById(id);
+    if (p) p.textContent = msg;
+    if (input) input.setAttribute('aria-invalid', 'true');
+  }
+  function clearErr(input, id) {
+    var p = document.getElementById(id);
+    if (p) p.textContent = '';
+    if (input) input.removeAttribute('aria-invalid');
+  }
+  [[nome, 'e-nome'], [tel, 'e-tel'], [email, 'e-email']].forEach(function (pair) {
+    pair[0].addEventListener('input', function () { clearErr(pair[0], pair[1]); });
+  });
+  form.addEventListener('change', function (e) {
+    if (e.target.name === 'Modelo') clearErr(form.querySelector('.modelo'), 'e-modelo');
+  });
+
+  function validate() {
+    var ok = true, first = null;
+    var n = nome.value.trim();
+    if (n.length < 3) { setErr(nome, 'e-nome', 'Informe seu nome completo.'); ok = false; first = first || nome; }
+    var d = digits(tel.value);
+    if (d.length < 10 || d.length > 11) { setErr(tel, 'e-tel', 'Informe um telefone com DDD, por exemplo (11) 91234-5678.'); ok = false; first = first || tel; }
+    var em = email.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)) { setErr(email, 'e-email', 'Informe um e-mail válido.'); ok = false; first = first || email; }
+    var modelo = form.querySelector('input[name="Modelo"]:checked');
+    if (!modelo) { setErr(form.querySelector('.modelo'), 'e-modelo', 'Escolha um modelo ou marque "Ainda não decidi".'); ok = false; first = first || form.querySelector('input[name="Modelo"]'); }
+    if (first) first.focus();
+    return ok;
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    status.textContent = ''; status.classList.remove('is-error');
+    if (!validate()) return;
+    if (form.querySelector('input[name="_honey"]').value) return; // robô
+
+    var modelo = form.querySelector('input[name="Modelo"]:checked');
+    var payload = {
+      'Nome': nome.value.trim(),
+      'Telefone': maskPhone(tel.value),
+      'E-mail': email.value.trim(),
+      'Modelo': modelo.value,
+      'Aberto a negociar o modelo': modelo.getAttribute('data-modelo') === 'indeciso' ? 'Sim' : 'Não',
+      'Origem': 'Landing page 3V',
+      '_subject': 'Novo cadastro de franqueado · 3V',
+      '_template': 'table',
+      '_captcha': 'false',
+      '_replyto': email.value.trim()
+    };
+
+    btn.disabled = true;
+    var label = btn.textContent;
+    btn.textContent = 'Enviando…';
+
+    fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (r) { return r.json().catch(function () { return { success: r.ok ? 'true' : 'false' }; }); })
+      .then(function (res) {
+        var success = res && (res.success === true || res.success === 'true');
+        if (!success) {
+          var msg = (res && res.message) || '';
+          if (/activat/i.test(msg)) {
+            throw new Error('Formulário aguardando ativação. Confira a caixa de entrada do e-mail de destino e clique no link de ativação do FormSubmit.');
+          }
+          throw new Error('');
+        }
+        done.querySelector('[data-done-nome]').textContent = payload['Nome'].split(' ')[0];
+        form.hidden = true;
+        done.hidden = false;
+        done.focus();
+      })
+      .catch(function (err) {
+        status.textContent = (err && err.message) || 'Não foi possível enviar agora. Verifique sua conexão e tente novamente.';
+        status.classList.add('is-error');
+        btn.disabled = false;
+        btn.textContent = label;
+      });
+  });
+})();
