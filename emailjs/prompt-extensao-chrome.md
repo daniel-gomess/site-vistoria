@@ -78,7 +78,7 @@ HTML do conteúdo (cole exatamente como está, do primeiro <table ao último </t
 
         <!-- ações -->
         <tr>
-          <td style="padding:22px 28px 6px;">
+          <td style="padding:22px 28px 30px;">
             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
               <tr>
                 <td bgcolor="#a31526" style="background:#a31526;border-radius:6px;">
@@ -90,14 +90,6 @@ HTML do conteúdo (cole exatamente como está, do primeiro <table ao último </t
                 </td>
               </tr>
             </table>
-            <p style="margin:14px 0 0;font-size:13px;color:#6b5f61;">Para responder por e-mail, use o "Responder": a mensagem vai direto para {{primeiro_nome}}.</p>
-          </td>
-        </tr>
-
-        <!-- rodapé -->
-        <tr>
-          <td style="padding:24px 28px 26px;">
-            <p style="margin:0;padding-top:16px;border-top:1px solid #eadfe0;font-size:12px;color:#8a7d7f;">Enviado pelo formulário da landing page 3V: <a href="{{pagina}}" style="color:#8a7d7f;">{{pagina}}</a></p>
           </td>
         </tr>
 
