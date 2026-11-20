@@ -655,7 +655,8 @@ h1, h2, h3 { font-family: var(--sc-font-display); }
   box-shadow: var(--sc-edge), var(--sc-e2);
 }
 .form__intro { margin: var(--sc-2) 0 var(--sc-6); color: var(--sc-ink-soft); }
-.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+/* armadilha para robôs: display:none para o preenchimento automático do navegador nunca tocar nela */
+.hp { display: none !important; }
 .field { margin-bottom: var(--sc-5); }
 .field label, .modelo legend { display: block; font-weight: 500; font-size: var(--sc-t-sm); margin-bottom: 8px; }
 .field input {
