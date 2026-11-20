@@ -5,3 +5,7 @@ assets/src2/
 node_modules/
 .DS_Store
 Thumbs.db
+
+# e-mails exportados (contêm dados pessoais)
+*.msg
+*.eml

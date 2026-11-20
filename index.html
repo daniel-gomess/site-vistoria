@@ -320,7 +320,12 @@
         </ul>
       </div>
 
-      <form class="form" id="form-cadastro" action="https://formsubmit.co/dani.augusto.gomes@hotmail.com" method="POST" novalidate>
+      <!-- EmailJS: preencha as três chaves abaixo (veja README). Enquanto estiverem
+           vazias, o envio usa o FormSubmit como reserva. -->
+      <form class="form" id="form-cadastro" action="https://formsubmit.co/dani.augusto.gomes@hotmail.com" method="POST" novalidate
+            data-emailjs-service="service_is2qo8c"
+            data-emailjs-template="template_fdag7cc"
+            data-emailjs-key="fVbebz5TDqIHw4vhJ">
         <h3 class="form__title">Cadastro de interesse</h3>
         <p class="form__intro">Deixe seus dados e um consultor da 3V entra em contato.</p>
 
@@ -341,7 +346,7 @@
         </div>
         <div class="field">
           <label for="f-email">E-mail</label>
-          <input id="f-email" name="E-mail" type="email" autocomplete="email" required aria-describedby="e-email">
+          <input id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="e-email">
           <p class="field__err" id="e-email" aria-live="polite"></p>
         </div>
 
@@ -350,7 +355,7 @@
           <label class="opt"><input type="radio" name="Modelo" value="Delivery (R$ 20.000)" data-modelo="delivery" required><span class="opt__name">Delivery</span><span class="opt__meta">R$ 20 mil</span></label>
           <label class="opt"><input type="radio" name="Modelo" value="Micro (R$ 40.000)" data-modelo="micro"><span class="opt__name">Micro</span><span class="opt__meta">R$ 40 mil</span></label>
           <label class="opt"><input type="radio" name="Modelo" value="Master (R$ 60.000)" data-modelo="master"><span class="opt__name">Master</span><span class="opt__meta">R$ 60 mil</span></label>
-          <label class="opt opt--open"><input type="radio" name="Modelo" value="Ainda não decidi (aberto a negociar o modelo)" data-modelo="indeciso"><span class="opt__name">Ainda não decidi</span><span class="opt__meta">Quero conversar sobre o modelo ideal</span></label>
+          <label class="opt opt--open"><input type="radio" name="Modelo" value="Ainda não decidi" data-modelo="indeciso"><span class="opt__name">Ainda não decidi</span><span class="opt__meta">Quero conversar sobre o modelo ideal</span></label>
           <p class="field__err" id="e-modelo" aria-live="polite"></p>
         </fieldset>
 

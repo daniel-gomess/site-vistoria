@@ -7,7 +7,6 @@
 (function () {
   'use strict';
 
-  var FORM_ENDPOINT = 'https://formsubmit.co/ajax/dani.augusto.gomes@hotmail.com';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
@@ -195,46 +194,122 @@
     return ok;
   }
 
+  /* ---- envio do cadastro --------------------------------------------------
+     O envio é separado em "provedores". Hoje:
+       emailjs     principal. Usa as chaves em data-emailjs-* no <form>.
+       formsubmit  reserva, usada só enquanto as chaves do EmailJS estão vazias.
+     Para a VPS, basta criar outro provedor que faça POST para a API própria
+     e escolher ele em pickProvider(). O resto do formulário não muda. */
+
+  var EMAILJS_URL = 'https://api.emailjs.com/api/v1.0/email/send';
+  var FORMSUBMIT_URL = 'https://formsubmit.co/ajax/dani.augusto.gomes@hotmail.com';
+
+  function emailjsConfig() {
+    var c = {
+      service: (form.getAttribute('data-emailjs-service') || '').trim(),
+      template: (form.getAttribute('data-emailjs-template') || '').trim(),
+      key: (form.getAttribute('data-emailjs-key') || '').trim()
+    };
+    return c.service && c.template && c.key ? c : null;
+  }
+
+  function agoraBrasilia() {
+    try {
+      return new Date().toLocaleString('pt-BR', {
+        timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      }).replace(',', ' às');
+    } catch (e) { return new Date().toLocaleString('pt-BR'); }
+  }
+
+  // Os dados do cadastro em um formato neutro; cada provedor traduz para o seu.
+  function buildLead() {
+    var modelo = form.querySelector('input[name="Modelo"]:checked');
+    var d = digits(tel.value);
+    var primeiroNome = nome.value.trim().split(/\s+/)[0];
+    var aberto = modelo.getAttribute('data-modelo') === 'indeciso';
+    var msgWhats = 'Olá, ' + primeiroNome + '! Aqui é da 3V. Recebemos seu cadastro de interesse na franquia' +
+      (aberto ? '' : ' ' + modelo.getAttribute('data-modelo').replace(/^./, function (c) { return c.toUpperCase(); })) +
+      ' e gostaríamos de conversar.';
+    return {
+      nome: nome.value.trim(),
+      primeiro_nome: primeiroNome,
+      telefone: maskPhone(tel.value),
+      telefone_link: 'tel:+55' + d,
+      whatsapp_link: 'https://wa.me/55' + d + '?text=' + encodeURIComponent(msgWhats),
+      email: email.value.trim(),
+      modelo: modelo.value,
+      data_hora: agoraBrasilia(),
+      pagina: location.href.split('#')[0]
+    };
+  }
+
+  var providers = {
+    emailjs: function (lead, cfg) {
+      var params = {};
+      for (var k in lead) params[k] = lead[k];
+      params.reply_to = lead.email;   // o template usa {{reply_to}} no campo Reply-To
+      return fetch(EMAILJS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ service_id: cfg.service, template_id: cfg.template, user_id: cfg.key, template_params: params })
+      }).then(function (r) {
+        if (r.ok) return;
+        return r.text().then(function (t) {
+          console.warn('[cadastro] EmailJS respondeu', r.status, t);
+          throw new Error('');
+        });
+      });
+    },
+
+    formsubmit: function (lead) {
+      // O campo precisa se chamar "email": é dele que o FormSubmit tira o Reply-To.
+      // (O "_replyto" enviado antes foi ignorado; o e-mail recebido veio sem Reply-To.)
+      return fetch(FORMSUBMIT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          'Nome': lead.nome,
+          'Telefone': lead.telefone,
+          'email': lead.email,
+          'Modelo': lead.modelo,
+          'Data e hora (Brasília)': lead.data_hora,
+          '_subject': 'Novo cadastro de franqueado · 3V',
+          '_template': 'table',
+          '_captcha': 'false'
+        })
+      })
+        .then(function (r) { return r.json().catch(function () { return { success: r.ok ? 'true' : 'false' }; }); })
+        .then(function (res) {
+          if (res && (res.success === true || res.success === 'true')) return;
+          console.warn('[cadastro] FormSubmit respondeu', res);
+          if (/activat/i.test((res && res.message) || '')) {
+            throw new Error('Formulário aguardando ativação. Confira a caixa de entrada do e-mail de destino e clique no link de ativação do FormSubmit.');
+          }
+          throw new Error('');
+        });
+    }
+  };
+
+  function sendLead(lead) {
+    var cfg = emailjsConfig();
+    return cfg ? providers.emailjs(lead, cfg) : providers.formsubmit(lead);
+  }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     status.textContent = ''; status.classList.remove('is-error');
     if (!validate()) return;
     if (form.querySelector('input[name="_honey"]').value) return; // robô
 
-    var modelo = form.querySelector('input[name="Modelo"]:checked');
-    var payload = {
-      'Nome': nome.value.trim(),
-      'Telefone': maskPhone(tel.value),
-      'E-mail': email.value.trim(),
-      'Modelo': modelo.value,
-      'Aberto a negociar o modelo': modelo.getAttribute('data-modelo') === 'indeciso' ? 'Sim' : 'Não',
-      'Origem': 'Landing page 3V',
-      '_subject': 'Novo cadastro de franqueado · 3V',
-      '_template': 'table',
-      '_captcha': 'false',
-      '_replyto': email.value.trim()
-    };
-
+    var lead = buildLead();
     btn.disabled = true;
     var label = btn.textContent;
     btn.textContent = 'Enviando…';
 
-    fetch(FORM_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(payload)
-    })
-      .then(function (r) { return r.json().catch(function () { return { success: r.ok ? 'true' : 'false' }; }); })
-      .then(function (res) {
-        var success = res && (res.success === true || res.success === 'true');
-        if (!success) {
-          var msg = (res && res.message) || '';
-          if (/activat/i.test(msg)) {
-            throw new Error('Formulário aguardando ativação. Confira a caixa de entrada do e-mail de destino e clique no link de ativação do FormSubmit.');
-          }
-          throw new Error('');
-        }
-        done.querySelector('[data-done-nome]').textContent = payload['Nome'].split(' ')[0];
+    sendLead(lead)
+      .then(function () {
+        done.querySelector('[data-done-nome]').textContent = lead.primeiro_nome;
         form.hidden = true;
         done.hidden = false;
         done.focus();

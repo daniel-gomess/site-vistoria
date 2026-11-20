@@ -25,6 +25,7 @@ site.js           comportamento: ficha de vistoria, gravação do NIV, botão Te
 scrollcraft.css   engine de animação por rolagem (não editar)
 scrollcraft.js    engine de animação por rolagem (não editar)
 assets/img/       fotos e logos usados na página
+emailjs/          modelo HTML do e-mail de cadastro, para colar no EmailJS
 .scrollcraft/     brief de design e registro do projeto (não é publicado no site)
 ```
 
@@ -53,11 +54,43 @@ As cores de cada tema ficam no início do `site.css`, nos blocos `[data-brand="1
 
 ## Formulário de cadastro
 
-O formulário pede nome, telefone (com máscara e DDD), e-mail e modelo desejado. Quem marca "Ainda não decidi" está aberto a negociar o modelo, e o e-mail chega com o campo `Aberto a negociar o modelo: Sim`. Os botões "Escolher Delivery/Micro/Master" da tabela já deixam o modelo marcado no formulário.
+O formulário pede nome, telefone (com máscara e DDD), e-mail e modelo desejado. Quem marca "Ainda não decidi" recebe esse texto na linha Modelo do e-mail. Os botões "Escolher Delivery/Micro/Master" da tabela já deixam o modelo marcado no formulário.
 
-O envio passa pelo [FormSubmit](https://formsubmit.co), um serviço gratuito que encaminha os dados por e-mail sem servidor próprio. No primeiro envio, ele manda um e-mail de ativação para o endereço de destino, e os cadastros só começam a chegar depois que alguém clica no link. Até lá, quem envia o formulário vê um aviso de que ele aguarda ativação, em vez da confirmação.
+O envio usa o [EmailJS](https://www.emailjs.com), que manda o e-mail com um modelo próprio: em português, com o logo e as cores da 3V, horário de Brasília e botões para chamar o interessado no WhatsApp ou ligar. O "Responder" do e-mail vai direto para quem se cadastrou. O plano gratuito do EmailJS cobre 200 e-mails por mês.
 
-Para trocar o e-mail de destino, altere o endereço na constante `FORM_ENDPOINT` em `site.js` e no atributo `action` do formulário em `index.html` (este é usado quando o JavaScript está desativado). Depois da ativação, o FormSubmit oferece um código aleatório que pode substituir o endereço nesses dois lugares, para que ele não fique visível no código.
+Enquanto as chaves do EmailJS não estiverem preenchidas, o site envia pelo [FormSubmit](https://formsubmit.co), que já está ativado. Assim o formulário não para durante a troca.
+
+### Configurando o EmailJS
+
+1. Crie uma conta gratuita em emailjs.com.
+2. Em *Email Services*, clique em *Add New Service*, escolha o seu provedor de e-mail (Outlook ou Gmail) e conecte a conta que vai enviar as mensagens. Anote o *Service ID*.
+3. Em *Email Templates*, crie um template. Na aba de conteúdo, abra o editor de código e cole o arquivo `emailjs/template-cadastro.html` deste repositório. Preencha os campos do envio assim:
+   - Subject: `Novo cadastro de franqueado · 3V · {{nome}}`
+   - To Email: o e-mail que deve receber os cadastros
+   - From Name: `Site 3V`
+   - Reply To: `{{reply_to}}`
+
+   Salve e anote o *Template ID*.
+4. Em *Account*, copie a *Public Key*.
+5. No `index.html`, preencha os três atributos do `<form id="form-cadastro">`:
+
+   ```html
+   data-emailjs-service="service_xxxxxxx"
+   data-emailjs-template="template_xxxxxxx"
+   data-emailjs-key="sua_public_key"
+   ```
+
+Essas três chaves são públicas por natureza: o EmailJS foi feito para rodar no navegador e elas aparecem no código de qualquer site que o usa. Para evitar abuso, restrinja nas configurações de segurança da conta os domínios que podem usar as chaves (o endereço do GitHub Pages e, depois, o domínio definitivo).
+
+O logo do e-mail é carregado do site publicado. Se o endereço do site mudar, troque a URL da imagem no começo do template.
+
+### Quando o site for para a VPS
+
+O envio está separado em "provedores" no fim do `site.js` (`providers.emailjs` e `providers.formsubmit`). Para usar um envio próprio na VPS, sem limite mensal, crie um provedor que faça POST para a API do servidor e escolha esse provedor na função `sendLead`. A função `buildLead` já monta todos os dados do cadastro, incluindo data e hora de Brasília e os links de WhatsApp e telefone. O `template-cadastro.html` também pode ser reaproveitado no servidor.
+
+### Sem JavaScript
+
+Se o JavaScript estiver desativado no navegador do visitante, o formulário é enviado direto ao FormSubmit (atributo `action` do `<form>`), por POST. Para trocar esse e-mail de destino, altere o `action` e a constante `FORMSUBMIT_URL` em `site.js`.
 
 ## Editando o conteúdo
 
