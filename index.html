@@ -307,9 +307,11 @@
         </ul>
       </div>
 
-      <!-- EmailJS: preencha as três chaves abaixo (veja README). Enquanto estiverem
-           vazias, o envio usa o FormSubmit como reserva. -->
+      <!-- Envio do cadastro (veja README): data-appsscript-url tem prioridade
+           (Gmail via Google Apps Script); se vazio, usa o EmailJS; sem os dois,
+           usa o FormSubmit como reserva. -->
       <form class="form" id="form-cadastro" action="https://formsubmit.co/dani.augusto.gomes@hotmail.com" method="POST" novalidate
+            data-appsscript-url="https://script.google.com/macros/s/AKfycbzzK43Xr9McmFhpps-2IslbsWXXWPyISWHoaZzed5fyCYod61snq2epXibov-RSF2NbIA/exec"
             data-emailjs-service="service_is2qo8c"
             data-emailjs-template="template_fdag7cc"
             data-emailjs-key="fVbebz5TDqIHw4vhJ">

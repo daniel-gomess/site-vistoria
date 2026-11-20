@@ -25,7 +25,8 @@ site.js           comportamento: ficha de vistoria, gravação do NIV, formulár
 scrollcraft.css   engine de animação por rolagem (não editar)
 scrollcraft.js    engine de animação por rolagem (não editar)
 assets/img/       fotos e logos usados na página
-emailjs/          modelo HTML do e-mail de cadastro, para colar no EmailJS
+emailjs/          modelo HTML do e-mail de cadastro (fonte única) e prompts da extensão
+apps-script/      script do Google que envia o cadastro pelo Gmail
 .scrollcraft/     brief de design e registro do projeto (não é publicado no site)
 ```
 
@@ -56,9 +57,24 @@ Há duas versões do logo em `assets/img/`: `logo-supervisao-branco.png` (azul t
 
 O formulário pede nome, telefone (com máscara e DDD), e-mail e modelo desejado. Quem marca "Ainda não decidi" recebe esse texto na linha Modelo do e-mail. Os botões "Escolher Delivery/Micro/Master" da tabela já deixam o modelo marcado no formulário.
 
-O envio usa o [EmailJS](https://www.emailjs.com), que manda o e-mail com um modelo próprio: em português, com o logo e as cores da Super Visão, horário de Brasília e botões para chamar o interessado no WhatsApp ou ligar. O "Responder" do e-mail vai direto para quem se cadastrou. O plano gratuito do EmailJS cobre 200 e-mails por mês.
+O envio usa um Google Apps Script (`apps-script/Code.gs`) que manda o e-mail pela sua conta Gmail, com um modelo próprio: em português, com o logo e as cores da Super Visão, horário de Brasília e botões para chamar o interessado no WhatsApp ou ligar. O "Responder" vai direto para quem se cadastrou, e não há rodapé de nenhum serviço. É gratuito; o Gmail permite cerca de 100 destinatários por dia (cada cópia conta como um destinatário).
 
-Enquanto as chaves do EmailJS não estiverem preenchidas, o site envia pelo [FormSubmit](https://formsubmit.co), que já está ativado. Assim o formulário não para durante a troca.
+O site escolhe a forma de envio nesta ordem: o Apps Script, se `data-appsscript-url` estiver preenchido no `<form>`; senão o [EmailJS](https://www.emailjs.com), se as três chaves `data-emailjs-*` estiverem preenchidas; senão o [FormSubmit](https://formsubmit.co). O EmailJS no plano gratuito acrescenta "Email sent via EmailJS.com" no fim de cada e-mail, e só os planos pagos tiram essa linha.
+
+### Configurando o Google Apps Script
+
+1. Entre em [script.google.com](https://script.google.com) com a conta Google que vai enviar os e-mails e clique em *Novo projeto*.
+2. Apague o conteúdo do arquivo `Código.gs` e cole todo o `apps-script/Code.gs` deste repositório. Dê um nome ao projeto, por exemplo "Cadastro Super Visão".
+3. No começo do código, confira `DESTINO` (quem recebe os cadastros) e, se quiser cópia para outra pessoa, preencha `COPIA`. Salve (Ctrl+S).
+4. No menu de funções, escolha `testarEnvio` e clique em *Executar*. O Google vai pedir autorização: escolha a sua conta, clique em *Avançado* e depois em *Acessar Cadastro Super Visão (não seguro)*, e permita. Esse aviso aparece porque o script é seu e não passou por revisão do Google. Deve chegar um e-mail de teste em `DESTINO`.
+5. Clique em *Implantar* > *Nova implantação*. No ícone de engrenagem, escolha *App da Web*. Em *Executar como*, deixe *Eu*; em *Quem pode acessar*, escolha *Qualquer pessoa*. Clique em *Implantar*.
+6. Copie a *URL do app da Web* (termina em `/exec`) e coloque no `index.html`, no atributo `data-appsscript-url` do `<form id="form-cadastro">`.
+
+Para mudar destinatário ou cópia depois, edite o script e faça *Implantar* > *Gerenciar implantações* > editar (lápis) > *Nova versão* > *Implantar*. A URL continua a mesma.
+
+O script recusa dados fora do formato esperado (modelo inexistente, telefone inválido, links estranhos), ignora envios de robôs e limita a 30 envios por hora.
+
+O HTML do e-mail vem de `emailjs/template-cadastro.html`. Depois de mudar esse arquivo, rode `python apps-script/gerar-code.py .` na pasta do projeto para gerar o `Code.gs` de novo, e atualize o script no Google (colar e criar nova versão da implantação).
 
 ### Configurando o EmailJS
 
@@ -86,7 +102,7 @@ O logo do e-mail é carregado do site publicado. Se o endereço do site mudar, t
 
 ### Quando o site for para a VPS
 
-O envio está separado em "provedores" no fim do `site.js` (`providers.emailjs` e `providers.formsubmit`). Para usar um envio próprio na VPS, sem limite mensal, crie um provedor que faça POST para a API do servidor e escolha esse provedor na função `sendLead`. A função `buildLead` já monta todos os dados do cadastro, incluindo data e hora de Brasília e os links de WhatsApp e telefone. O `template-cadastro.html` também pode ser reaproveitado no servidor.
+O envio está separado em "provedores" no fim do `site.js` (`providers.appsscript`, `providers.emailjs` e `providers.formsubmit`). Para usar um envio próprio na VPS, sem limite mensal, crie um provedor que faça POST para a API do servidor e escolha esse provedor na função `sendLead`. A função `buildLead` já monta todos os dados do cadastro, incluindo data e hora de Brasília e os links de WhatsApp e telefone. O `template-cadastro.html` também pode ser reaproveitado no servidor.
 
 ### Sem JavaScript
 

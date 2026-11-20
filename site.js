@@ -170,9 +170,11 @@
   }
 
   /* ---- envio do cadastro --------------------------------------------------
-     O envio é separado em "provedores". Hoje:
-       emailjs     principal. Usa as chaves em data-emailjs-* no <form>.
-       formsubmit  reserva, usada só enquanto as chaves do EmailJS estão vazias.
+     O envio é separado em "provedores", escolhidos nesta ordem:
+       appsscript  principal. Google Apps Script que envia pelo Gmail
+                   (apps-script/Code.gs). Usa data-appsscript-url no <form>.
+       emailjs     usado se a URL do Apps Script estiver vazia. Chaves em data-emailjs-*.
+       formsubmit  reserva final, se nenhum dos dois estiver configurado.
      Para a VPS, basta criar outro provedor que faça POST para a API própria
      e escolher ele em pickProvider(). O resto do formulário não muda. */
 
@@ -220,6 +222,21 @@
   }
 
   var providers = {
+    appsscript: function (lead, url) {
+      var body = {};
+      for (var k in lead) body[k] = lead[k];
+      body._honey = form.querySelector('input[name="_honey"]').value;
+      // Sem cabeçalho Content-Type: o navegador manda text/plain e não faz a
+      // checagem prévia de CORS, que o Apps Script não responde.
+      return fetch(url, { method: 'POST', body: JSON.stringify(body) })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          if (res && res.ok) return;
+          console.warn('[cadastro] Apps Script respondeu', res);
+          throw new Error('');
+        });
+    },
+
     emailjs: function (lead, cfg) {
       var params = {};
       for (var k in lead) params[k] = lead[k];
@@ -267,6 +284,8 @@
   };
 
   function sendLead(lead) {
+    var gas = (form.getAttribute('data-appsscript-url') || '').trim();
+    if (gas) return providers.appsscript(lead, gas);
     var cfg = emailjsConfig();
     return cfg ? providers.emailjs(lead, cfg) : providers.formsubmit(lead);
   }
