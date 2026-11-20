@@ -228,11 +228,17 @@
       body._honey = form.querySelector('input[name="_honey"]').value;
       // Sem cabeçalho Content-Type: o navegador manda text/plain e não faz a
       // checagem prévia de CORS, que o Apps Script não responde.
+      // Falha de rede, resposta ilegível ou erro do Gmail ('falha') marcam
+      // reserva = true: o e-mail não saiu, então dá para tentar pelo EmailJS.
+      // Recusa de dados ou limite por hora não marcam: tentar de novo não adianta.
+      function paraReserva(motivo) { var e = new Error(''); e.reserva = true; e.motivo = motivo; return e; }
       return fetch(url, { method: 'POST', body: JSON.stringify(body) })
-        .then(function (r) { return r.json(); })
+        .catch(function (err) { throw paraReserva('rede: ' + err); })
+        .then(function (r) { return r.json().catch(function () { throw paraReserva('resposta ilegível (' + r.status + ')'); }); })
         .then(function (res) {
           if (res && res.ok) return;
           console.warn('[cadastro] Apps Script respondeu', res);
+          if (res && res.erro === 'falha') throw paraReserva('erro no envio do Gmail');
           throw new Error('');
         });
     },
@@ -285,8 +291,16 @@
 
   function sendLead(lead) {
     var gas = (form.getAttribute('data-appsscript-url') || '').trim();
-    if (gas) return providers.appsscript(lead, gas);
     var cfg = emailjsConfig();
+    if (gas) {
+      return providers.appsscript(lead, gas).catch(function (err) {
+        if (err && err.reserva && cfg) {
+          console.warn('[cadastro] Apps Script indisponível (' + err.motivo + '); enviando pelo EmailJS.');
+          return providers.emailjs(lead, cfg);
+        }
+        throw err;
+      });
+    }
     return cfg ? providers.emailjs(lead, cfg) : providers.formsubmit(lead);
   }
 
