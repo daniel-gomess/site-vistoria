@@ -1,6 +1,6 @@
-# 3V · Landing page de franquias
+# Super Visão · Landing page de franquias
 
-Página única para captar interessados em abrir uma franquia de vistoria automotiva da 3V (3VO Terceira Visão). Ela apresenta o mercado, a empresa, os serviços, a gravação de NIV com perícia veicular e os três modelos de franquia, e termina num formulário de cadastro que chega por e-mail.
+Página única para captar interessados em abrir uma franquia de vistoria automotiva da Super Visão Vistorias Automotivas. Ela apresenta o mercado, a empresa, os serviços, a gravação de NIV com perícia veicular e os três modelos de franquia, e termina num formulário de cadastro que chega por e-mail.
 
 O site é estático, feito em HTML, CSS e JavaScript puros. Não tem framework nem etapa de build.
 
@@ -20,8 +20,8 @@ Depois acesse `http://localhost:4500`. Abrir o `index.html` direto do disco (`fi
 
 ```
 index.html        conteúdo da página (todas as seções)
-site.css          estilos da página e os dois temas de cor
-site.js           comportamento: ficha de vistoria, gravação do NIV, botão Tema, formulário
+site.css          estilos e cores da página
+site.js           comportamento: ficha de vistoria, gravação do NIV, formulário
 scrollcraft.css   engine de animação por rolagem (não editar)
 scrollcraft.js    engine de animação por rolagem (não editar)
 assets/img/       fotos e logos usados na página
@@ -35,7 +35,7 @@ emailjs/          modelo HTML do e-mail de cadastro, para colar no EmailJS
 |---|---|
 | Capa | Foto do farol com uma mira de inspeção que se fecha durante a rolagem |
 | Mercado | 14 milhões de veículos por ano e os riscos de uma compra sem vistoria |
-| Empresa | Quem é a 3V: pilares, missão, visão e valores |
+| Empresa | Quem é a Super Visão: pilares, foto da unidade de Guarulhos, missão, visão e valores |
 | Serviços | Portfólio em trilho horizontal, de vistoria cautelar a perito em ID veicular |
 | NIV e perícia | O número de chassi é gravado letra por letra enquanto o visitante rola a página |
 | Modelos | Tabela com Delivery (R$ 20 mil), Micro (R$ 40 mil) e Master (R$ 60 mil) |
@@ -44,19 +44,19 @@ emailjs/          modelo HTML do e-mail de cadastro, para colar no EmailJS
 
 Em telas a partir de 1200px, a "Ficha de vistoria" na margem esquerda lista as seções e marca cada uma como conferida quando o visitante passa por ela.
 
-## Botão Tema (logo 1 e logo 2)
+## Marca e cores
 
-O logo oficial ainda não foi escolhido, então a página traz as duas versões, e o botão Tema no cabeçalho alterna entre elas. O logo 1 é branco sobre vinho (`#A31526`) e deixa a página em tons de vinho escuro. O logo 2 é branco com um ponto vermelho sobre grafite (`#33404A`) e deixa a página em tons de grafite.
+A página usa a identidade da Super Visão Vistorias Automotivas ([supervisao.com](https://supervisao.com)). O vermelho do logo (`#E21F1B`) é a cor principal, sobre um fundo escuro avermelhado. O azul-marinho da marca (`#062264`) aparece só no logo.
 
-O navegador do visitante guarda a escolha. Para abrir a página já num tema, use `?logo=1` ou `?logo=2` na URL.
+As cores ficam no bloco `:root` no início do `site.css`. `--sc-accent` é o vermelho dos botões e destaques, e `--accent-fg` é um tom mais claro do mesmo vermelho, usado em textos sobre o fundo escuro para manter a leitura confortável.
 
-As cores de cada tema ficam no início do `site.css`, nos blocos `[data-brand="1"]` e `[data-brand="2"]`. Quando o logo oficial for definido, remova o botão do cabeçalho em `index.html` e fixe o `data-brand` no script do `<head>`.
+Há duas versões do logo em `assets/img/`: `logo-supervisao-branco.png` (azul trocado por branco, usada no site) e `logo-supervisao.png` (cores originais, usada no e-mail, que tem fundo branco).
 
 ## Formulário de cadastro
 
 O formulário pede nome, telefone (com máscara e DDD), e-mail e modelo desejado. Quem marca "Ainda não decidi" recebe esse texto na linha Modelo do e-mail. Os botões "Escolher Delivery/Micro/Master" da tabela já deixam o modelo marcado no formulário.
 
-O envio usa o [EmailJS](https://www.emailjs.com), que manda o e-mail com um modelo próprio: em português, com o logo e as cores da 3V, horário de Brasília e botões para chamar o interessado no WhatsApp ou ligar. O "Responder" do e-mail vai direto para quem se cadastrou. O plano gratuito do EmailJS cobre 200 e-mails por mês.
+O envio usa o [EmailJS](https://www.emailjs.com), que manda o e-mail com um modelo próprio: em português, com o logo e as cores da Super Visão, horário de Brasília e botões para chamar o interessado no WhatsApp ou ligar. O "Responder" do e-mail vai direto para quem se cadastrou. O plano gratuito do EmailJS cobre 200 e-mails por mês.
 
 Enquanto as chaves do EmailJS não estiverem preenchidas, o site envia pelo [FormSubmit](https://formsubmit.co), que já está ativado. Assim o formulário não para durante a troca.
 
@@ -65,9 +65,9 @@ Enquanto as chaves do EmailJS não estiverem preenchidas, o site envia pelo [For
 1. Crie uma conta gratuita em emailjs.com.
 2. Em *Email Services*, clique em *Add New Service*, escolha o seu provedor de e-mail (Outlook ou Gmail) e conecte a conta que vai enviar as mensagens. Anote o *Service ID*.
 3. Em *Email Templates*, crie um template. Na aba de conteúdo, abra o editor de código e cole o arquivo `emailjs/template-cadastro.html` deste repositório. Preencha os campos do envio assim:
-   - Subject: `Novo cadastro de franqueado · 3V · {{nome}}`
+   - Subject: `Novo cadastro de franqueado · Super Visão · {{nome}}`
    - To Email: o e-mail que deve receber os cadastros
-   - From Name: `Site 3V`
+   - From Name: `Site Super Visão`
    - Reply To: `{{reply_to}}`
 
    Salve e anote o *Template ID*.
@@ -100,7 +100,7 @@ Os valores dos modelos aparecem em três lugares: na tabela em `#modelos`, nas o
 
 As imagens ficam em `assets/img/`, em `.webp`. Ao trocar uma, atualize os atributos `width` e `height` do `<img>` com as dimensões do novo arquivo.
 
-O número de chassi da chapa (`9BV3VSTR1A2025814`) é um exemplo, e a página o identifica como ilustrativo.
+O número de chassi da chapa (`9BWSV7R1A2025814X`) é um exemplo, e a página o identifica como ilustrativo.
 
 ## Publicação
 
@@ -109,5 +109,5 @@ Como o site é estático, qualquer hospedagem de arquivos serve. No GitHub Pages
 ## Créditos
 
 - Fotos de veículos: [Unsplash](https://unsplash.com), licença Unsplash (uso comercial permitido, sem exigência de atribuição).
-- Logos e foto da fachada: 3V / 3VO Terceira Visão.
+- Logo e fotos das unidades (fachada e Guarulhos Auto Shopping): Super Visão. O telefone que aparecia nas fotos foi removido.
 - Fontes: Geist e Geist Mono, via Google Fonts.

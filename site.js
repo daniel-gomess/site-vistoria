@@ -1,4 +1,4 @@
-/* 3V · comportamento próprio da página.
+/* Super Visão · comportamento próprio da página.
    O engine (scrollcraft.js) fica intocado. Aqui moram:
    1. a ficha de vistoria (nav que marca cada item como conferido)
    2. a gravação do NIV (assinatura da página)
@@ -11,31 +11,6 @@
 
   function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function progressOf(el) { return parseFloat(el.style.getPropertyValue('--sc-p')) || 0; }
-
-  /* ------------------------------------------------- 0. seletor de logo -- */
-  var BRANDS = {
-    '1': { theme: '#100b0c', tile: '%23a31526' },
-    '2': { theme: '#1b2226', tile: '%2333404a' }
-  };
-  var favicon = document.getElementById('favicon');
-  var themeMeta = document.querySelector('meta[name="theme-color"]');
-  function setBrand(b, persist) {
-    if (!BRANDS[b]) b = '1';
-    document.documentElement.setAttribute('data-brand', b);
-    var sw = document.querySelector('.tema');
-    if (sw) sw.setAttribute('aria-checked', b === '2' ? 'true' : 'false');
-    if (themeMeta) themeMeta.setAttribute('content', BRANDS[b].theme);
-    if (favicon) favicon.href = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='" + BRANDS[b].tile + "'/>" +
-      (b === '2' ? "<circle cx='26' cy='7' r='3' fill='%23c41532'/>" : '') +
-      "<text x='15' y='21.5' font-family='Arial' font-weight='700' font-size='14' fill='white' text-anchor='middle'>3V</text></svg>";
-    if (persist) { try { localStorage.setItem('3v-logo', b); } catch (e) {} }
-  }
-  setBrand(document.documentElement.getAttribute('data-brand') || '1', false);
-  document.addEventListener('click', function (e) {
-    if (e.target.closest('.tema')) {
-      setBrand(document.documentElement.getAttribute('data-brand') === '2' ? '1' : '2', true);
-    }
-  });
 
   /* ---------------------------------------------- 1. ficha de vistoria -- */
   var links = Array.prototype.slice.call(document.querySelectorAll('[data-ficha]'));
@@ -228,7 +203,7 @@
     var d = digits(tel.value);
     var primeiroNome = nome.value.trim().split(/\s+/)[0];
     var aberto = modelo.getAttribute('data-modelo') === 'indeciso';
-    var msgWhats = 'Olá, ' + primeiroNome + '! Aqui é da 3V. Recebemos seu cadastro de interesse na franquia' +
+    var msgWhats = 'Olá, ' + primeiroNome + '! Aqui é da Super Visão. Recebemos seu cadastro de interesse na franquia' +
       (aberto ? '' : ' ' + modelo.getAttribute('data-modelo').replace(/^./, function (c) { return c.toUpperCase(); })) +
       ' e gostaríamos de conversar.';
     return {
@@ -274,7 +249,7 @@
           'email': lead.email,
           'Modelo': lead.modelo,
           'Data e hora (Brasília)': lead.data_hora,
-          '_subject': 'Novo cadastro de franqueado · 3V',
+          '_subject': 'Novo cadastro de franqueado · Super Visão',
           '_template': 'table',
           '_captcha': 'false'
         })

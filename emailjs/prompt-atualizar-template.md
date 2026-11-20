@@ -1,17 +1,20 @@
-Atualize o conteúdo de um template que já existe na minha conta do EmailJS.
+Atualize um template que já existe na minha conta do EmailJS.
 
 Regras:
 - Não digite senhas nem códigos de verificação. Se aparecer tela de login, pare e me peça para entrar.
-- Altere somente o conteúdo (HTML) deste template. Não mude assunto, destinatários (To, Cc, Bcc), From Name, Reply To nem outros templates ou serviços.
+- Altere somente o que está descrito aqui. Não mude destinatários (To, Cc, Bcc), Reply To, outros templates nem serviços.
 - Não envie e-mails de teste.
 
 1. Abra https://dashboard.emailjs.com e confirme que estou logado.
 2. Vá em "Email Templates" e abra o template "Cadastro de franqueado - Site 3V" (Template ID: template_fdag7cc).
-3. Na aba "Content", clique em "Edit Content" e abra o editor de código (Code Editor / HTML).
-4. Apague todo o HTML atual e cole o HTML que está no final desta mensagem, exatamente como está.
-5. Confirme que o conteúdo novo NÃO tem mais as frases "Para responder por e-mail, use o Responder" e "Enviado pelo formulário da landing page 3V".
-6. Salve o template.
-7. Me responda confirmando que salvou e se algum passo não foi possível.
+3. Renomeie o template para: Cadastro de franqueado - Site Super Visão
+4. Na aba "Content", troque:
+   - Subject: Novo cadastro de franqueado · Super Visão · {{nome}}
+   - From Name: Site Super Visão
+5. Ainda em "Content", clique em "Edit Content", abra o editor de código (Code Editor / HTML), apague todo o HTML atual e cole o HTML que está no final desta mensagem, exatamente como está.
+6. Confirme que o HTML novo não tem mais "3V" nem "Terceira Visão" e que a imagem do cabeçalho aponta para logo-supervisao.png.
+7. Salve o template e confirme que o Template ID continua template_fdag7cc.
+8. Me responda confirmando o que foi salvo e se algum passo não foi possível.
 
 HTML do conteúdo (cole exatamente como está, do primeiro <table ao último </table>):
 
@@ -22,16 +25,16 @@ HTML do conteúdo (cole exatamente como está, do primeiro <table ao último </t
 
         <!-- cabeçalho -->
         <tr>
-          <td bgcolor="#a31526" style="background:#a31526;padding:22px 28px;">
-            <img src="https://daniel-gomess.github.io/site-vistoria/assets/img/logo1-mark.png" width="96" alt="3V Terceira Visão" style="display:block;width:96px;height:auto;border:0;">
+          <td bgcolor="#ffffff" style="background:#ffffff;padding:22px 28px 18px;border-bottom:4px solid #e21f1b;">
+            <img src="https://daniel-gomess.github.io/site-vistoria/assets/img/logo-supervisao.png" width="200" alt="Super Visão Vistorias Automotivas" style="display:block;width:200px;height:auto;border:0;">
           </td>
         </tr>
 
         <!-- título -->
         <tr>
           <td style="padding:28px 28px 8px;">
-            <p style="margin:0 0 6px;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:#a31526;font-weight:bold;">Novo cadastro de franqueado</p>
-            <h1 style="margin:0;font-size:24px;line-height:1.25;color:#1c1416;">{{nome}} quer abrir uma franquia 3V</h1>
+            <p style="margin:0 0 6px;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:#e21f1b;font-weight:bold;">Novo cadastro de franqueado</p>
+            <h1 style="margin:0;font-size:24px;line-height:1.25;color:#1c1416;">{{nome}} quer abrir uma franquia Super Visão</h1>
             <p style="margin:10px 0 0;font-size:14px;color:#6b5f61;">Recebido em {{data_hora}} (horário de Brasília)</p>
           </td>
         </tr>
@@ -41,8 +44,8 @@ HTML do conteúdo (cole exatamente como está, do primeiro <table ao último </t
           <td style="padding:20px 28px 4px;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;font-size:15px;">
               <tr>
-                <th bgcolor="#a31526" style="border:1px solid #a31526;padding:12px;text-align:left;background:#a31526;color:#ffffff;font-size:14px;">Campo</th>
-                <th bgcolor="#a31526" style="border:1px solid #a31526;padding:12px;text-align:left;background:#a31526;color:#ffffff;font-size:14px;">Informação</th>
+                <th bgcolor="#e21f1b" style="border:1px solid #e21f1b;padding:12px;text-align:left;background:#e21f1b;color:#ffffff;font-size:14px;">Campo</th>
+                <th bgcolor="#e21f1b" style="border:1px solid #e21f1b;padding:12px;text-align:left;background:#e21f1b;color:#ffffff;font-size:14px;">Informação</th>
               </tr>
               <tr>
                 <td style="border:1px solid #e3d6d7;padding:10px 12px;font-weight:bold;width:34%;">Nome</td>
@@ -54,7 +57,7 @@ HTML do conteúdo (cole exatamente como está, do primeiro <table ao último </t
               </tr>
               <tr>
                 <td style="border:1px solid #e3d6d7;padding:10px 12px;font-weight:bold;width:34%;">E-mail</td>
-                <td style="border:1px solid #e3d6d7;padding:10px 12px;"><a href="mailto:{{email}}" style="color:#a31526;">{{email}}</a></td>
+                <td style="border:1px solid #e3d6d7;padding:10px 12px;"><a href="mailto:{{email}}" style="color:#e21f1b;">{{email}}</a></td>
               </tr>
               <tr>
                 <td style="border:1px solid #e3d6d7;padding:10px 12px;font-weight:bold;width:34%;">Modelo</td>
@@ -69,7 +72,7 @@ HTML do conteúdo (cole exatamente como está, do primeiro <table ao último </t
           <td style="padding:22px 28px 30px;">
             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
               <tr>
-                <td bgcolor="#a31526" style="background:#a31526;border-radius:6px;">
+                <td bgcolor="#e21f1b" style="background:#e21f1b;border-radius:6px;">
                   <a href="{{whatsapp_link}}" style="display:inline-block;padding:12px 18px;font-size:14px;font-weight:bold;color:#ffffff;text-decoration:none;">Chamar no WhatsApp</a>
                 </td>
                 <td width="10" style="width:10px;"></td>

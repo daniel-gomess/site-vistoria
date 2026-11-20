@@ -73,3 +73,11 @@ Nova gramática nomeada: **Laudo técnico**. A página é um laudo de vistoria d
 - Logo oficial ainda não definido. A página tem um seletor no cabeçalho com a cor principal de cada logo (vinho e grafite), que troca o logo e a paleta inteira via `data-brand` no `<html>`. A escolha persiste no navegador e pode ser forçada com `?logo=1` ou `?logo=2`.
 - O amarelo provisório saiu. O acento agora é o vermelho da marca, com `--accent-fg` mais claro para texto sobre fundo escuro.
 - A foto da fachada substituiu a do farol amarelo na seção de suporte.
+
+## Atualização: marca corrigida (20/11/2026)
+
+- A empresa correta é a Super Visão Vistorias Automotivas (supervisao.com), não a 3VO Terceira Visão. Todos os textos dizem "Super Visão".
+- Cor principal: o vermelho do logo (#E21F1B), a pedido do usuário. Fundo escuro avermelhado; o azul-marinho (#062264) fica só no logo.
+- O botão Tema e os dois logos provisórios foram removidos. Há uma marca só.
+- Fotos reais das unidades: fachada (seção Suporte) e Guarulhos Auto Shopping (seção Empresa), com os telefones removidos das imagens.
+- Funcionalidades sem mudança.

@@ -1,4 +1,4 @@
-/* V3 Vistoria · estilos da página.
+/* Super Visão · estilos da página.
    O engine (scrollcraft.css) é o mecanismo; aqui só tokens e markup próprio. */
 
 :root {
@@ -13,34 +13,21 @@
   :root { --margin: clamp(176px, 14vw, 216px); }
 }
 
-/* ------------------------------------------------- as duas marcas --
-   O seletor no cabeçalho troca data-brand no <html>. Cada logo traz a
-   paleta da página: só tokens; o resto do CSS não sabe qual está ativa.
-   --sc-accent preenche (botões, caixas). --accent-fg é o mesmo vermelho
-   clareado para texto e traço sobre fundo escuro, que precisa de 4.5:1. */
-:root, [data-brand="1"] {           /* Logo 1: branco sobre vinho */
-  --sc-canvas:     #100b0c;
-  --sc-surface:    #1c1416;
-  --ground-2:      #160f11;
-  --sc-ink:        #f5efee;
-  --sc-ink-soft:   #b4a6a8;
-  --sc-accent:     #b8182d;
+/* -------------------------------------------------------- a marca --
+   Super Visão: o vermelho do logo é a cor principal. --sc-accent preenche
+   (botões, caixas, cabeçalho da tabela); --accent-fg é o mesmo vermelho
+   clareado para texto e traço sobre o fundo escuro, que precisa de 4.5:1.
+   O azul-marinho da marca fica no logo. */
+:root {
+  --sc-canvas:     #120b0c;
+  --sc-surface:    #1e1315;
+  --ground-2:      #170e10;
+  --sc-ink:        #f6f0ef;
+  --sc-ink-soft:   #b8a8a9;
+  --sc-accent:     #e21f1b;
   --sc-accent-ink: #ffffff;
-  --accent-fg:     #ff6b79;
-  --brand-tile:    #a31526;
-  --sc-shadow-color: 350 40% 3%;
-}
-[data-brand="2"] {                  /* Logo 2: branco e ponto vermelho sobre grafite */
-  --sc-canvas:     #1b2226;
-  --sc-surface:    #263036;
-  --ground-2:      #20282d;
-  --sc-ink:        #f2f4f5;
-  --sc-ink-soft:   #a9b3b9;
-  --sc-accent:     #c41532;
-  --sc-accent-ink: #ffffff;
-  --accent-fg:     #ff7584;
-  --brand-tile:    transparent;
-  --sc-shadow-color: 205 30% 6%;
+  --accent-fg:     #ff6a5f;
+  --sc-shadow-color: 355 40% 3%;
 }
 :focus-visible { outline-color: var(--accent-fg); }
 
@@ -116,46 +103,12 @@ h1, h2, h3 { font-family: var(--sc-font-display); }
   padding-inline: var(--sc-gutter);
   background: linear-gradient(to bottom, color-mix(in oklab, var(--sc-canvas) 82%, transparent), transparent);
 }
-.mark {
-  display: inline-flex; align-items: center; text-decoration: none; margin: 0;
-  background: var(--brand-tile); border-radius: 6px;
-  padding: 5px 9px;
-}
-[data-brand="2"] .mark { padding-inline: 0; }
+.mark { display: inline-flex; align-items: center; text-decoration: none; margin: 0; }
 .mark img { height: 34px; width: auto; }
-.mark__img--2, [data-brand="2"] .mark__img--1 { display: none; }
-[data-brand="2"] .mark__img--2 { display: block; }
 
-/* seletor de logo: funciona como um seletor de tema claro/escuro */
-.bar__right { display: flex; align-items: center; gap: 12px; }
-.tema {
-  display: inline-flex; align-items: center; gap: 10px;
-  min-height: 44px; padding: 0 4px;
-  border: 0; background: transparent; cursor: pointer;
-  color: var(--sc-ink); font-size: var(--sc-t-sm); font-weight: 500;
-  border-radius: var(--sc-r-pill);
-}
-.tema__track {
-  position: relative; display: block;
-  width: 58px; height: 30px; border-radius: 999px;
-  background: #a31526;
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16), inset 0 1px 2px rgb(0 0 0 / 0.3);
-  transition: background-color 220ms var(--sc-ease-out);
-}
-.tema__knob {
-  position: absolute; top: 3px; left: 3px;
-  width: 24px; height: 24px; border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.35);
-  transition: transform 240ms var(--sc-ease-out);
-}
-[data-brand="2"] .tema__track { background: #33404a; }
-[data-brand="2"] .tema__knob { transform: translateX(28px); }
-.tema:active .tema__knob { scale: 0.92; }
-@media (prefers-reduced-motion: reduce) { .tema__track, .tema__knob { transition: none; } }
 @media (max-width: 560px) {
-  .bar .btn--sm { display: none; }
-  .mark img { height: 30px; }
+  .bar .btn { min-height: 36px; padding: 0 12px; }
+  .mark img { height: 26px; }
 }
 
 /* --------------------------------------------- ficha de vistoria (nav) -- */
@@ -363,6 +316,15 @@ h1, h2, h3 { font-family: var(--sc-font-display); }
 .pilares > div:nth-child(even) { padding-left: var(--sc-5); border-left: 1px solid var(--sc-hairline); }
 .pilares dt { font-weight: 600; font-size: var(--sc-t-lg); letter-spacing: -0.015em; }
 .pilares dd { margin: 6px 0 0; color: var(--sc-ink-soft); font-size: var(--sc-t-sm); }
+.loja {
+  margin: var(--sc-9) auto 0; position: relative;
+}
+.loja__img {
+  margin: 0; overflow: hidden; border-radius: var(--sc-r-md);
+  height: clamp(280px, 56vh, 620px);
+}
+.loja__img img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 38%; }
+.loja__cap { margin: var(--sc-3) 0 0; font-size: var(--sc-t-xs); color: var(--sc-ink-soft); }
 .mvv {
   margin-top: var(--sc-10);
   display: grid; gap: var(--sc-7);
@@ -718,14 +680,15 @@ h1, h2, h3 { font-family: var(--sc-font-display); }
 .form-done__title { margin: 0 0 var(--sc-3); font-size: var(--sc-t-2xl); font-weight: 600; letter-spacing: -0.03em; }
 
 .foot {
-  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sc-3) var(--sc-6);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--sc-3) var(--sc-5);
   padding-block: var(--sc-6) var(--sc-7);
+  padding-inline: var(--sc-gutter);   /* simétrico: centraliza na página toda, ignorando a coluna da ficha */
+  text-align: center;
   border-top: 1px solid var(--sc-hairline);
   color: var(--sc-ink-soft); font-size: var(--sc-t-xs);
 }
 .foot p { margin: 0; }
-.mark--foot { margin-right: auto; }
-.mark--foot img { height: 30px; }
+.mark--foot img { height: 28px; }
 
 /* ---------------------------------------------------- movimento reduzido -- */
 @media (prefers-reduced-motion: reduce) {
